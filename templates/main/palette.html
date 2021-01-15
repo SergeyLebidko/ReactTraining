@@ -1,0 +1,120 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/palette.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Динамически формируемая палитра карточек со случайными цветами</h2>
+    <div id="container">
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        class Square extends React.Component {
+            render() {
+                let style = {
+                    "width": "150px",
+                    "height": "150px",
+                    "backgroundColor": this.props.backgroundColor,
+                    "borderTopRightRadius": "10px",
+                    "borderTopLeftRadius": "10px"
+                }
+                return (
+                    <div style={style}></div>
+                )
+            }
+        }
+
+        class Label extends React.Component {
+            render() {
+                let divStyle = {
+                    "position": "relative",
+                    "width": "150px",
+                    "height": "50px",
+                }
+                let pStyle = {
+                    "fontFamily": "Arial",
+                    "position": "absolute",
+                    "margin": "0",
+                    "padding": "0",
+                    "top": "50%",
+                    "left": "50%",
+                    "transform": "translate(-50%, -50%)"
+                }
+                return (
+                    <div style={divStyle}><p style={pStyle}>{this.props.colorName}</p></div>
+                )
+            }
+        }
+
+        class Card extends React.Component {
+            render() {
+                let style = {
+                    "margin": "5px",
+                    "width": "150px",
+                    "height": "200px",
+                    "border": "1px solid rgb(150, 150, 150)",
+                    "borderRadius": "10px"
+                }
+                return (
+                    <div style={style} className="colorCard">
+                        <Square backgroundColor={this.props.color}/>
+                        <Label colorName={this.props.color}/>
+                    </div>
+                )
+            }
+        }
+
+        class CardSet extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    colors: this.createColorsList()
+                };
+                this.updateColors = this.updateColors.bind(this);
+            }
+
+            createColorsList() {
+                let letters = "0123456789ABCDEF".split(""), s1, s2, s3;
+                let colors = [];
+                for (let index = 0; index < 44; index++) {
+                    s1 = letters[Math.floor(Math.random() * letters.length)];
+                    s2 = letters[Math.floor(Math.random() * letters.length)];
+                    s3 = letters[Math.floor(Math.random() * letters.length)];
+                    colors.push(`#${s1}${s1}${s2}${s2}${s3}${s3}`);
+                }
+                return colors;
+            }
+
+            updateColors() {
+                this.setState({
+                    colors: this.createColorsList()
+                });
+            }
+
+            render() {
+                return (
+                    [
+                        <span key="1" onClick={this.updateColors}>Обновить палитру</span>,
+                        <div key="2" id="cardSet">
+                            {this.state.colors.map((color, index) => <Card key={index} color={color}/>)}
+                        </div>
+                    ]
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <CardSet/>,
+            document.getElementById("container")
+        );
+
+        $(".colorCard").click(function () {
+            let $this = $(this);
+            console.log($("p", $this).text());
+        })
+    </script>
+{% endblock %}

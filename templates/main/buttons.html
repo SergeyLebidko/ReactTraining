@@ -1,0 +1,34 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/buttons.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Кнопки на CSS</h2>
+    <div id="container">
+        <div style="display: flex; align-items: center">
+            <span class="button1">Кнопка 1</span>
+            <span class="button2">Кнопка 2</span>
+            <span class="button3">Кнопка 3</span>
+            <span class="button4">Кнопка 4</span>
+        </div>
+        <div style="display: flex; align-items: center">
+            <span class="button5">Кнопка 5</span>
+            <span class="button6">Кнопка 6</span>
+            <span class="button7">Кнопка 7</span>
+            <span class="button8">Кнопка 8</span>
+        </div>
+        <div style="display: flex; align-items: center">
+            <span class="button9">Кнопка 9</span>
+            <span class="button10"></span>
+            <span class="button11">Кнопка11</span>
+            <span class="button12">Кнопка12</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel"></script>
+{% endblock %}

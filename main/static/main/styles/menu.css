@@ -1,0 +1,87 @@
+.container {
+    position: relative;
+    width: 95%;
+    height: 800px;
+    margin: 10px auto;
+    padding: 10px;
+    border: 1px solid rgb(225, 225, 225);
+    background-color: rgb(235, 235, 235);
+    overflow: hidden;
+}
+
+.menu-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.menu-button div {
+    position: absolute;
+    border-radius: 2px;
+    width: 30px;
+    height: 10px;
+    background-color: black;
+}
+
+.menu-button div:first-child {
+    top: 10px;
+    left: 10px;
+    transition-property: transform;
+    transition-duration: 500ms;
+}
+
+.menu-button div:last-child {
+    top: 30px;
+    left: 10px;
+    transition-property: transform;
+    transition-duration: 500ms;
+}
+
+.opened-menu div:first-child {
+    transform: translate(0, 10px) rotate(45deg);
+    transition-property: transform;
+    transition-duration: 500ms;
+}
+
+.opened-menu div:last-child {
+    transform: translate(0, -10px) rotate(-45deg);
+    transition-property: transform;
+    transition-duration: 500ms;
+}
+
+/* **** Стили для пунктов меню **** */
+
+.menu-content {
+    position: absolute;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100%;
+    margin: 0;
+    padding: 50px 0 0 0;
+    background-color: white;
+    z-index: 1;
+    font-size: 1.5em;
+    box-shadow: 10px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.menu-content ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-content li {
+    cursor: pointer;
+    margin: 0;
+    padding: 15px 25px;
+}
+
+.menu-content li:hover {
+    background-color: cadetblue;
+    color: white;
+}

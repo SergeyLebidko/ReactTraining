@@ -1,0 +1,91 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/slider_2.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Слайдер (вариант 2)</h2>
+    <div id="container">
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        function getImageUrls() {
+            let result = [];
+            for (let index = 1; index <= 10; index++) {
+                result.push(`/static/main/images/${index}.jpg`)
+            }
+            return result;
+        }
+
+        class Slider extends React.Component {
+            constructor(props) {
+                super(props);
+                this.leftHandler = this.leftHandler.bind(this);
+                this.rightHandler = this.rightHandler.bind(this);
+            }
+
+            componentDidMount() {
+                this.$currentSlide = $(".slider__slide").last().css({"z-index": "1"});
+            }
+
+            leftHandler() {
+                let currentIndex = +this.$currentSlide.attr("index");
+                let nextIndex = currentIndex - 1;
+                if (nextIndex < 0) nextIndex = this.props.urls.length - 1;
+
+                let $nextSlide = $(".slider__slide[index=" + nextIndex + "]");
+                $nextSlide.css({left: "800px", "z-index": "1"});
+
+                this.$currentSlide.animate({left: "-800px"}, "normal", function () {
+                    $(this).css({"z-index": "0"});
+                });
+                $nextSlide.animate({left: "0px"}, "normal");
+
+                this.$currentSlide = $nextSlide;
+            }
+
+            rightHandler() {
+                let currentIndex = +this.$currentSlide.attr("index");
+                let nextIndex = currentIndex + 1;
+                if (nextIndex === this.props.urls.length) nextIndex = 0;
+
+                let $nextSlide = $(".slider__slide[index=" + nextIndex + "]");
+                $nextSlide.css({left: "-800px", "z-index": "1"});
+
+                this.$currentSlide.animate({left: "800px"}, "normal", function () {
+                    $(this).css({"z-index": "0"});
+                });
+                $nextSlide.animate({left: "0px"}, "normal");
+
+                this.$currentSlide = $nextSlide;
+            }
+
+            render() {
+                return (
+                    <div className="slider">
+                        {this.props.urls.map((url, index) => {
+                            return (
+                                <div key={index} className="slider__slide" index={index}>
+                                    <img src={url}/>
+                                </div>
+                            )
+                        })}
+                        <img key="arrow-left" className="arrow" onClick={this.leftHandler}
+                             src="/static/main/images/arrow-left.png"/>
+                        <img key="arrow-right" className="arrow" onClick={this.rightHandler}
+                             src="/static/main/images/arrow-right.png"/>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <Slider urls={getImageUrls()}/>,
+            document.getElementById("container")
+        );
+    </script>
+{% endblock %}

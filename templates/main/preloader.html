@@ -1,0 +1,118 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/preloader.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Прелоадер</h2>
+    <div id="container"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        class Container extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    preloaderVisible: false
+                }
+                this.showPreloader = this.showPreloader.bind(this);
+            }
+
+            showPreloader() {
+                setTimeout(() => {
+                    this.setState({
+                        preloaderVisible: false
+                    });
+                }, 10000);
+                this.setState({preloaderVisible: true});
+            }
+
+            render() {
+                return (
+                    [
+                        <ShowPreloaderButton key="1" clickHandler={this.showPreloader}/>,
+                        <Preloader key="2" visible={this.state.preloaderVisible}/>
+                    ]
+                )
+            }
+        }
+
+        class ShowPreloaderButton extends React.Component {
+            render() {
+                return <span onClick={this.props.clickHandler}>Показать прелоадер</span>
+            }
+        }
+
+        class Preloader extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    size: 10,
+                    position: 0,
+                    interval: null
+                }
+            }
+
+            componentWillReceiveProps(nextProps) {
+                if (nextProps.visible) {
+                    this.setState({
+                        position: 0,
+                        interval: setInterval(() => {
+                            this.setState({
+                                position: this.state.position + 1
+                            })
+                        }, 150)
+                    })
+                } else {
+                    clearInterval(this.state.interval);
+                }
+            }
+
+            render() {
+                let styleForPreloader;
+                if (this.props.visible) {
+                    styleForPreloader = {display: "block"};
+                    let squaresData = new Array(this.state.size);
+                    squaresData.fill(1);
+                    let index;
+                    for (let offset = 0; offset <= 4; offset++) {
+                        index = (this.state.position % this.state.size) - offset;
+                        if (index < 0) {
+                            if (this.state.position >= this.state.size) {
+                                index = this.state.size + index;
+                            } else {
+                                break;
+                            }
+                        }
+                        squaresData[index] = 1.5 - offset * 0.1;
+                    }
+                    let styleForSquare;
+                    return (
+                        <div className="preloader" style={styleForPreloader}>
+                            <div className="squares-container">
+                                {squaresData.map((value, index) => {
+                                    styleForSquare = {transform: `scale(${value})`}
+                                    return <div className="square" key={index} style={styleForSquare}/>
+                                })}
+                            </div>
+                        </div>
+                    )
+                } else {
+                    styleForPreloader = {display: "none"};
+                    return (
+                        <div className="preloader" style={styleForPreloader}></div>
+                    )
+                }
+            }
+        }
+
+        ReactDOM.render(
+            <Container/>,
+            document.getElementById("container")
+        )
+    </script>
+{% endblock %}
+

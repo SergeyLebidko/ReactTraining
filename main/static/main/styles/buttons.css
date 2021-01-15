@@ -1,0 +1,511 @@
+span {
+    display: inline-block;
+    font-size: 2em;
+}
+
+/* Кнопка 1 */
+
+.button1 {
+    position: relative;
+    margin: 20px;
+    padding: 10px 25px;
+    border: 2px solid steelblue;
+    cursor: pointer;
+    color: steelblue;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition-property: color;
+    transition-duration: 500ms;
+}
+
+.button1:hover {
+    color: white;
+    transition-property: color;
+    transition-duration: 500ms;
+}
+
+.button1:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: steelblue;
+    z-index: -1;
+    transition-property: height, top;
+    transition-duration: 500ms, 500ms;
+}
+
+.button1:hover:before {
+    height: 100%;
+    top: 0;
+    transition-property: height, top;
+    transition-duration: 500ms, 500ms;
+}
+
+/* Кнопка 2 */
+
+.button2 {
+    position: relative;
+    margin: 20px;
+    padding: 10px 25px;
+    border: 2px solid steelblue;
+    cursor: pointer;
+    color: steelblue;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition-property: color;
+    transition-duration: 500ms;
+}
+
+.button2:hover {
+    color: white;
+    transition-property: color;
+    transition-duration: 500ms;
+}
+
+.button2:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 100%;
+    background-color: steelblue;
+    z-index: -1;
+    transition-property: width, left;
+    transition-duration: 500ms, 500ms;
+}
+
+.button2:hover:before {
+    width: 100%;
+    left: 0;
+    transition-property: width, left;
+    transition-duration: 500ms, 500ms;
+}
+
+/* Кнопка 3 */
+
+.button3 {
+    position: relative;
+    margin: 20px;
+    padding: 10px 25px;
+    border: 2px solid steelblue;
+    cursor: pointer;
+    color: steelblue;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition-property: color;
+    transition-duration: 500ms;
+}
+
+.button3:hover {
+    color: white;
+    transition-property: color;
+    transition-duration: 500ms;
+}
+
+.button3:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 0;
+    transform: rotate(45deg);
+    background-color: steelblue;
+    z-index: -1;
+    transition-property: top, height;
+    transition-duration: 500ms, 500ms;
+}
+
+.button3:hover:before {
+    top: -150%;
+    height: 400%;
+    transition-property: top, height;
+    transition-duration: 500ms, 500ms;
+}
+
+/* Кнопка 4 */
+
+.button4 {
+    position: relative;
+    margin: 20px;
+    padding: 10px 25px;
+    border: 2px solid steelblue;
+    cursor: pointer;
+    color: steelblue;
+    text-transform: uppercase;
+    overflow: hidden;
+    transition-property: color;
+    transition-duration: 500ms;
+}
+
+.button4:hover {
+    color: white;
+    transition-property: color;
+    transition-duration: 500ms;
+}
+
+.button4:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background-color: steelblue;
+    z-index: -1;
+    transform: translate(-50%, -50%) scale(0);
+    transition-property: transform;
+    transition-duration: 500ms, 500ms;
+}
+
+.button4:hover:before {
+    transform: translate(-50%, -50%) scale(1);
+    transition-property: transform;
+    transition-duration: 500ms, 500ms;
+}
+
+/* Кнопка 5 */
+
+.button5 {
+    position: relative;
+    margin: 20px;
+    padding: 10px 25px;
+    cursor: pointer;
+    color: steelblue;
+    text-transform: uppercase;
+    overflow: hidden;
+    outline: 2px solid rgba(70, 130, 180, 1);
+    outline-offset: 0;
+    transition: all 500ms;
+}
+
+.button5:hover {
+    outline: 1px solid rgba(70, 130, 180, 0);
+    outline-offset: 30px;
+    color: white;
+    background-color: steelblue;
+    transition: all 500ms;
+}
+
+/* Кнопка 6 */
+
+.button6 {
+    position: relative;
+    margin: 20px;
+    padding: 10px 25px;
+    cursor: pointer;
+    color: steelblue;
+    text-transform: uppercase;
+    transition: all 500ms;
+    overflow: hidden;
+}
+
+.button6:hover {
+    transform: scale(1.1, 1);
+    transition: all 500ms;
+}
+
+.button6:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: steelblue;
+    opacity: 0.2;
+    transition: all 500ms;
+}
+
+.button6:hover:after {
+    left: 50%;
+    width: 0;
+    opacity: 0;
+    transition: all 500ms;
+}
+
+.button6:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 100%;
+    opacity: 0;
+    border-top: 2px solid steelblue;
+    border-bottom: 2px solid steelblue;
+    box-sizing: border-box;
+    transition: all 500ms;
+}
+
+.button6:hover:before {
+    left: 0;
+    opacity: 1;
+    width: 100%;
+    transition: all 500ms;
+}
+
+/* Кнопка 7 */
+
+.button7 {
+    position: relative;
+    margin: 20px;
+    padding: 10px 25px;
+    cursor: pointer;
+    color: steelblue;
+    text-transform: uppercase;
+    transition: all 500ms;
+    overflow: hidden;
+    outline: 1px solid transparent;
+    outline-offset: 30px;
+}
+
+.button7:hover {
+    outline: 2px solid steelblue;
+    outline-offset: 0;
+}
+
+.button7:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: steelblue;
+    opacity: 0.2;
+    transition: all 500ms;
+}
+
+.button7:hover:before {
+    opacity: 0;
+    transform: scale(0.1);
+}
+
+/* Кнопка 8 */
+
+.button8 {
+    position: relative;
+    margin: 20px;
+    padding: 10px 25px;
+    cursor: pointer;
+    color: white;
+    background-color: steelblue;
+    text-transform: uppercase;
+    border-radius: 20px;
+    transition: all 500ms;
+}
+
+.button8:hover {
+    box-shadow: 0 10px 10px rgba(30, 30, 30, 0.2);
+    transform: translate(0, -5px);
+}
+
+.button8:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: steelblue;
+    opacity: 1;
+    z-index: -1;
+    border-radius: 20px;
+    transition: all 500ms;
+}
+
+.button8:hover:before {
+    opacity: 0;
+    transform: scale(1.3);
+}
+
+/* Кнопка 9 */
+
+.button9 {
+    position: relative;
+    margin: 20px;
+    padding: 10px 25px;
+    cursor: pointer;
+    color: steelblue;
+    text-transform: uppercase;
+    border: 2px solid steelblue;
+    overflow: hidden;
+    transition: all 500ms;
+}
+
+.button9:hover {
+    color: white;
+    background-color: lightskyblue;
+}
+
+.button9:before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -50px;
+    width: 30px;
+    height: 120%;
+    background-image: linear-gradient(to right, transparent, steelblue);
+    opacity: 0.3;
+    transform: rotate(10deg);
+}
+
+.button9:hover:before {
+    left: 120%;
+    transition: all 700ms;
+}
+
+/* Кнопка 10 */
+
+.button10 {
+    position: relative;
+    width: 156px;
+    height: 36px;
+    margin: 20px;
+    padding: 10px 25px;
+    cursor: pointer;
+    text-transform: uppercase;
+    overflow: hidden;
+}
+
+.button10:before {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: 'BACK';
+    color: lightgrey;
+    background-color: dimgray;
+    transform: translateY(-50%) rotateX(90deg);
+    transition: all 500ms;
+}
+
+.button10:after {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: 'FRONT';
+    color: dimgrey;
+    background-color: lightgrey;
+    transform: translateY(0) rotateX(0);
+    transition: all 500ms;
+}
+
+.button10:hover:before {
+    transform: translateY(0) rotateX(0);
+}
+
+.button10:hover:after {
+    transform: translateY(50%) rotateX(-90deg);
+}
+
+/* Кнопка 11 */
+
+.button11 {
+    font-size: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 156px;
+    height: 36px;
+    margin: 20px;
+    padding: 10px 25px;
+    cursor: pointer;
+    text-transform: uppercase;
+    overflow: hidden;
+    color: white;
+    background-color: steelblue;
+    border-radius: 10px;
+    text-indent: 0;
+    transition: all 500ms;
+}
+
+.button11:hover {
+    text-indent: -30px;
+    background-color: lightskyblue;
+}
+
+
+.button11:after {
+    content: ">";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    right: -30px;
+    width: 30px;
+    height: 100%;
+    transition: all 500ms;
+    background-color: rgba(255, 255, 255, 0.3);
+    text-indent: 0;
+}
+
+.button11:hover:after {
+    right: 0;
+    text-indent: 0;
+}
+
+/* Кнопка 12 */
+
+
+.button12 {
+    position: relative;
+    margin: 20px;
+    padding: 10px 25px;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: steelblue;
+    border-radius: 10px;
+    text-indent: 0;
+}
+
+.button12:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid lightblue;
+    background-color: rgba(176, 224, 230, 0.2);
+    transition: all 500ms;
+}
+
+.button12:hover:before {
+    background-color: transparent;
+    transform: rotate(-20deg);
+}
+
+.button12:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid lightblue;
+    background-color: rgba(176, 224, 230, 0.2);
+    transition: all 500ms;
+}
+
+.button12:hover:after {
+    background-color: transparent;
+    transform: rotate(20deg);
+}

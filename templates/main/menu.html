@@ -1,0 +1,57 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/menu.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Меню</h2>
+    <div id="container" class="container"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        class MenuContainer extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    visible: false
+                }
+                this.menuButtonClickHandler = this.menuButtonClickHandler.bind(this);
+            }
+
+            menuButtonClickHandler(event) {
+                let $menuButton = $(event.target).closest(".menu-button");
+                $menuButton.toggleClass("opened-menu");
+                if ($menuButton.hasClass("opened-menu")) {
+                    $(".menu-content").animate({"left": "0"});
+                } else {
+                    $(".menu-content").animate({"left": "-320"});
+                }
+            }
+
+            render() {
+                let items = ["Главная", "Создать", "Найти", "Удалить", "Вставить", "Редактировать", "Выйти"];
+                return ([
+                    <div className="menu-button" onClick={this.menuButtonClickHandler} key="button">
+                        <div></div>
+                        <div></div>
+                    </div>,
+                    <div className="menu-content" key="content">
+                        <ul>
+                            {items.map((value, index) => {
+                                return <li key={index}>{value}</li>
+                            })}
+                        </ul>
+                    </div>
+                ]);
+            }
+        }
+
+        ReactDOM.render(
+            <MenuContainer/>,
+            document.getElementById("container")
+        );
+    </script>
+{% endblock %}

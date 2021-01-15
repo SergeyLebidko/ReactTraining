@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ReactTraining</title>
+
+    <!-- Стили -->
+    <link rel="stylesheet" href="{% static 'main/styles/base.css' %}">
+    {% block styles %}
+    {% endblock %}
+
+    <!-- Скрипты -->
+    <script src="{% static 'main/js/jquery-3.5.1.js' %}"></script>
+    <script crossorigin src="{% static 'main/js/react.js' %}"></script>
+    <script crossorigin src="{% static 'main/js/react-dom.js' %}"></script>
+    <script src="{% static 'main/js/babel.js' %}"></script>
+</head>
+<body>
+
+{% block content %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+</body>
+</html>

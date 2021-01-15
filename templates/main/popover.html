@@ -1,0 +1,150 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/popover.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Поповер</h2>
+    <div id="container"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        class PopoverContainer extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    popoverVisible: false,
+                    popoverElement: null,
+                    popoverDirection: null
+                }
+                this.buttonClickHandler = this.buttonClickHandler.bind(this);
+            }
+
+            buttonClickHandler(event) {
+                this.setState({
+                    popoverVisible: true,
+                    popoverElement: event.target,
+                    popoverDirection: $(event.target).attr("action")
+                })
+            }
+
+            render() {
+                return (
+                    [
+                        <Button key="up" value="Вверх" action="up" clickHandler={this.buttonClickHandler}/>,
+                        <Button key="right" value="Вправо" action="right" clickHandler={this.buttonClickHandler}/>,
+                        <Button key="down" value="Вниз" action="down" clickHandler={this.buttonClickHandler}/>,
+                        <Button key="left" value="Влево" action="left" clickHandler={this.buttonClickHandler}/>,
+                        <Popover key="popover" visible={this.state.popoverVisible} element={this.state.popoverElement}
+                                 direction={this.state.popoverDirection}/>
+                    ]
+                )
+            }
+        }
+
+        function Button(props) {
+            return <span action={props.action} onClick={props.clickHandler}>{props.value}</span>
+        }
+
+        class Popover extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    visible: props.visible,
+                    element: props.element,
+                    direction: props.direction
+                }
+                this.closePopover = this.closePopover.bind(this);
+            }
+
+            componentWillReceiveProps(nextProps) {
+                this.setState({
+                    visible: nextProps.visible,
+                    element: nextProps.element,
+                    direction: nextProps.direction
+                })
+            }
+
+            closePopover() {
+                this.setState({
+                    visible: false
+                })
+            }
+
+            render() {
+                let style;
+                let $self = $(this.self);
+                if (this.state.visible) {
+                    let $element = $(this.state.element);
+                    let {top, left} = $element.position();
+
+                    let marginTop = $element.css("margin-top");
+                    let marginLeft = $element.css("margin-left");
+
+                    top += +marginTop.slice(0, marginTop.length - 2);
+                    left += +marginLeft.slice(0, marginLeft.length - 2);
+
+                    switch (this.state.direction) {
+                        case "right": {
+                            left = left + $element.outerWidth() + 10;
+                            style = {
+                                display: "block",
+                                top: `${top}px`,
+                                left: `${left}px`
+                            }
+                            break;
+                        }
+                        case "left": {
+                            left = left - $self.outerWidth() - 10;
+                            style = {
+                                display: "block",
+                                top: `${top}px`,
+                                left: `${left}px`
+                            }
+                            break;
+                        }
+                        case "up": {
+                            top = top - $self.outerHeight() - 10;
+                            style = {
+                                display: "block",
+                                top: `${top}px`,
+                                left: `${left}px`
+                            }
+                            break;
+                        }
+                        case "down": {
+                            top = top + $element.outerHeight() + 10;
+                            style = {
+                                display: "block",
+                                top: `${top}px`,
+                                left: `${left}px`
+                            }
+                        }
+                    }
+
+
+                } else {
+                    style = {display: "none"}
+                }
+
+                return (
+                    <div className="popover" style={style} ref={(self) => this.self = self}>
+                        <div className="close-button" onClick={this.closePopover}>
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <p>Привет!</p>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <PopoverContainer/>,
+            document.getElementById("container")
+        )
+    </script>
+{% endblock %}

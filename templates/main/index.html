@@ -1,0 +1,87 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/index.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="menu-button for-close-menu">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="menu-container">
+        <ul>
+            <li>
+                <a href="{% url 'main:palette' %}" target="_blank">Палитра</a>
+            </li>
+            <li>
+                <a href="{% url 'main:dynamic_table' %}" target="_blank">Динамическая таблица</a>
+            </li>
+            <li>
+                <a href="{% url 'main:msg_list' %}" target="_blank">Компонент сообщений</a>
+            </li>
+            <li>
+                <a href="{% url 'main:preloader' %}" target="_blank">Прелоадер</a>
+            </li>
+            <li>
+                <a href="{% url 'main:popover' %}" target="_blank">Поповер</a>
+            </li>
+            <li>
+                <a href="{% url 'main:menu' %}" target="_blank">Меню на React</a>
+            </li>
+            <li>
+                <a href="{% url 'main:slider_1' %}" target="_blank">Слайдер (вариант 1)</a>
+            </li>
+            <li>
+                <a href="{% url 'main:slider_2' %}" target="_blank">Слайдер (вариант 2)</a>
+            </li>
+            <li>
+                <a href="{% url 'main:animation' %}" target="_blank">Анимация (CSS)</a>
+            </li>
+            <li>
+                <a href="{% url 'main:search_component' %}" target="_blank">Компонент поиска</a>
+            </li>
+            <li>
+                <a href="{% url 'main:toggle' %}" target="_blank">Компонент переключатель</a>
+            </li>
+            <li>
+                <a href="{% url 'main:buttons' %}" target="_blank">Кнопки на CSS</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        let $menuButton = $(".menu-button");
+        $menuButton.data("status", "close");
+
+        $menuButton.click(function () {
+            let status = $(this).data("status");
+            let $menuContainer = $(".menu-container");
+
+            if (status === "open") {
+                $menuButton.removeClass("for-open-menu").addClass("for-close-menu");
+                $menuButton.data("status", "close");
+                $menuContainer.animate(
+                    {
+                        "left": "-550px"
+                    },
+                    "normal"
+                );
+            } else if (status === "close") {
+                $menuButton.removeClass("for-close-menu").addClass("for-open-menu");
+                $menuButton.data("status", "open");
+                $menuContainer.animate(
+                    {
+                        "left": "0"
+                    },
+                    "normal"
+                );
+            }
+        });
+    </script>
+{% endblock %}

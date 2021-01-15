@@ -1,0 +1,86 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/slider_1.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Слайдер (вариант 1)</h2>
+    <div id="container"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        function getFilenamesList() {
+            let result = [];
+            for (let index = 1; index <= 10; index++) result.push(`${index}.jpg`);
+            return result;
+        }
+
+        class Slider extends React.Component {
+            constructor(props) {
+                super(props);
+                this.slideToLeft = this.slideToLeft.bind(this);
+                this.slideToRight = this.slideToRight.bind(this);
+            }
+
+            slideToLeft() {
+                let $currentImg = $(".slider img[current=true]");
+                $currentImg.attr("current", "false");
+                $currentImg.animate({opacity: 0}, "normal");
+
+                let nextImgIndex = +$currentImg.attr("index") - 1;
+                if (nextImgIndex < 0) nextImgIndex = this.props.items.length - 1;
+                let $nextImg = $(".slider img[index=" + nextImgIndex + "]");
+                $nextImg.animate({opacity: 1}, "normal");
+                $nextImg.attr("current", "true");
+            }
+
+            slideToRight() {
+                let $currentImg = $(".slider img[current=true]");
+                $currentImg.attr("current", "false");
+                $currentImg.animate({opacity: 0}, "normal");
+
+                let nextImgIndex = +$currentImg.attr("index") + 1;
+                if (nextImgIndex === this.props.items.length) nextImgIndex = 0;
+                let $nextImg = $(".slider img[index=" + nextImgIndex + "]");
+                $nextImg.animate({opacity: 1}, "normal");
+                $nextImg.attr("current", "true");
+            }
+
+            render() {
+                let current, style;
+                return (
+                    <div className="slider">
+                        <ul>
+                            {this.props.items.map((value, index) => {
+                                current = (index === 0);
+                                if (current) {
+                                    style = {opacity: 1}
+                                } else {
+                                    style = {opacity: 0}
+                                }
+                                return (
+                                    <li key={index}><img index={index} current={current.toString()} style={style}
+                                                         src={`/static/main/images/${value}`}/></li>
+                                )
+                            })}
+                        </ul>
+                        <img className="arrow left-arrow" src="/static/main/images/arrow-left.png"
+                             onClick={this.slideToLeft}/>
+                        <img className="arrow right-arrow" src="/static/main/images/arrow-right.png"
+                             onClick={this.slideToRight}/>
+                    </div>
+                )
+            }
+        }
+
+
+        ReactDOM.render(
+            <Slider items={getFilenamesList()}>Привет!</Slider>
+            ,
+            document.getElementById("container")
+        );
+    </script>
+{% endblock %}

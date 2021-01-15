@@ -1,0 +1,30 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/animation.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Примеры простых анимаций</h2>
+    <div id="container">
+        <div>
+            <span class="slide-animation">Анимация при наведении мыши (перемещение градиента)</span>
+            <span class="cycle-animation">Постоянная зацикленная анимация (изменение размера)</span>
+        </div>
+        <div class="ball-container">
+            <div class="ball"></div>
+        </div>
+        <div class="cube-container">
+            <div class="cube"></div>
+        </div>
+        <div class="circles-container">
+            <div class="circle circle__first"></div>
+            <div class="circle circle__second"></div>
+            <div class="circle circle__third"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

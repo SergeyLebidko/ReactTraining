@@ -1,0 +1,55 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/toggle.css' %}">
+{% endblock styles %}
+
+{% block content %}
+    <h2 class="page-description">Компонент переключитель</h2>
+    <h3 style="text-align: center" id="label"></h3>
+    <div id="container"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        class Toggle extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    currentValue: true
+                }
+                this.clickHandler = this.clickHandler.bind(this);
+            }
+
+            clickHandler() {
+                this.setState((prevState) => {
+                    return {
+                        currentValue: !prevState.currentValue
+                    }
+                })
+            }
+
+            render() {
+                let className = "toggle " + (this.state.currentValue ? "enabled" : "disabled");
+                return (
+                    [
+                        <Label key="label" title={this.state.currentValue ? "Включен" : "Выключен"}/>,
+                        <div key="toggle" className={className} onClick={this.clickHandler}>
+                            <div></div>
+                        </div>
+                    ]
+                )
+            }
+        }
+
+        function Label(props) {
+            return ReactDOM.createPortal(props.title, document.getElementById("label"));
+        }
+
+        ReactDOM.render(
+            <Toggle/>,
+            document.getElementById("container")
+        )
+    </script>
+{% endblock %}

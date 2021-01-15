@@ -1,0 +1,67 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/dynamic_table.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Таблица из динамически сформированных строк</h2>
+    <div id="container">
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        class Row extends React.Component {
+            render() {
+                return (
+                    <tr>
+                        <td>{this.props.firstVal}</td>
+                        <td>{this.props.secondVal}</td>
+                    </tr>
+                )
+            }
+        }
+
+        class Table extends React.Component {
+            constructor() {
+                super();
+                this.state = {
+                    rowsCount: 0,
+                    rowsData: []
+                }
+                let interval = setInterval(() => {
+                    this.setState((prevState) => {
+                        prevState.rowsCount += 1;
+                        prevState.rowsData.push({
+                            firstVal: "Показатель: " + prevState.rowsCount,
+                            secondVal: "Значение: " + (prevState.rowsCount * 10)
+                        });
+                        if (prevState.rowsCount === 20) clearInterval(interval);
+                        return prevState
+                    });
+                }, 500);
+            }
+
+            render() {
+                return (
+                    <table>
+                        <tr>
+                            <th>Наименование</th>
+                            <th>Значение</th>
+                        </tr>
+                        {this.state.rowsData.map((data, index) => <Row key={index} {...data}/>)}
+                    </table>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <Table/>,
+            document.getElementById("container")
+        );
+
+    </script>
+{% endblock %}

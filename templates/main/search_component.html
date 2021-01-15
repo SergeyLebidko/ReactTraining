@@ -1,0 +1,175 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/search_component.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Компонент поиска</h2>
+    <div id="container"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        class SearchForm extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    selectedProduct: null
+                }
+                this.selectionHandler = this.selectionHandler.bind(this);
+            }
+
+            selectionHandler(product) {
+                this.setState({
+                    selectedProduct: product
+                });
+            }
+
+            render() {
+                return (
+                    <div className="search_form">
+                        <SelectionBoard product={this.state.selectedProduct}></SelectionBoard>
+                        <SearchComponent selectionHandler={this.selectionHandler}/>
+                    </div>
+                )
+            }
+        }
+
+        function SelectionBoard(props) {
+            let content;
+            if (props.product) {
+                content = [
+                    <p key="titleInfo">Вы выбрали: {props.product.title}</p>,
+                    <p key="priceInfo">Стоимость: {props.product.price}</p>
+                ];
+            } else {
+                content = <p>Выберите товар...</p>
+            }
+            return (
+                <div className="selection_board">{content}</div>
+            )
+        }
+
+        class SearchComponent extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    searchString: "",                   //Текущая строка в поле поиска
+                    requestTimer: null,                 //Таймер запроса к серверу
+                    nextPageUrl: null,                  //Адрес следующей части пагинатора
+                    searchResults: [],                  //Массив с результатами запроса
+                    notFoundFlag: false                 //Флаг отсутствующих результатов поиска
+                }
+                this.inputHandler = this.inputHandler.bind(this);
+                this.scrollHandler = this.scrollHandler.bind(this);
+                this.selectionHandler = this.selectionHandler.bind(this);
+            }
+
+            inputHandler(event) {
+                clearInterval(this.state.requestTimer);
+                let nextSearchString = event.target.value;
+                if (nextSearchString === " ") nextSearchString = "";
+
+                this.setState({
+                    searchString: nextSearchString
+                });
+
+                if (nextSearchString.length < 2) {
+                    this.setState({
+                        searchResults: [],
+                        notFoundFlag: false
+                    });
+                    return;
+                }
+
+                let self = this;
+                this.state.requestTimer = setTimeout(() => {
+                    $.ajax("/api/products/", {
+                        data: {search: nextSearchString}
+                    }).then((data) => {
+                        self.setState({
+                            searchResults: data.results,
+                            notFoundFlag: data.count === 0,
+                            nextPageUrl: data.next
+                        })
+                    });
+                }, 1000);
+            }
+
+            scrollHandler(event) {
+                let resultBlock = $(event.target)[0];
+                if (resultBlock.scrollHeight === (resultBlock.scrollTop + resultBlock.clientHeight)) {
+                    if (this.state.nextPageUrl) {
+                        let self = this;
+                        $.ajax(this.state.nextPageUrl).then((data) => {
+                            self.setState({
+                                searchResults: this.state.searchResults.concat(data.results),
+                                nextPageUrl: data.next
+                            })
+                        });
+                    }
+                }
+            }
+
+            selectionHandler(event) {
+                let index = +$(event.target).attr("index");
+                for (let product of this.state.searchResults) {
+                    if (product.id === index) {
+                        //При выборе элемента сбрасываем компонент
+                        this.setState({
+                            searchString: product.title,
+                            requestTimer: null,
+                            nextPageUrl: null,
+                            searchResults: [],
+                            notFoundFlag: false
+                        });
+                        this.props.selectionHandler(product);
+                        break;
+                    }
+                }
+            }
+
+            render() {
+                if (this.state.searchResults.length > 0) {
+                    return (
+                        [
+                            <input key="inputField" className="search_field" type="text" onChange={this.inputHandler}
+                                   placeholder="Введите название товара" value={this.state.searchString}/>,
+                            <div key="searchResult" className="search_result" onScroll={this.scrollHandler}>
+                                {this.state.searchResults.map((value) =>
+                                    <p className="item" key={value.id} index={value.id} onClick={this.selectionHandler}>
+                                        {value.title}
+                                    </p>
+                                )}
+                            </div>
+                        ]
+                    )
+                }
+
+                if (this.state.notFoundFlag) {
+                    return (
+                        [
+                            <input key="inputField" className="search_field" type="text"
+                                   onChange={this.inputHandler}
+                                   placeholder="Введите название товара" value={this.state.searchString}/>,
+                            <div key="searchResult" className="search_result">
+                                <p className="not_found_msg">--- ничего не найдено ---</p>
+                            </div>
+                        ]
+                    )
+                }
+                return (
+                    <input key="inputField" className="search_field" type="text" onChange={this.inputHandler}
+                           placeholder="Введите название товара" value={this.state.searchString}/>
+                );
+            }
+        }
+
+        ReactDOM.render(
+            <SearchForm/>,
+            document.getElementById("container")
+        );
+    </script>
+{% endblock %}

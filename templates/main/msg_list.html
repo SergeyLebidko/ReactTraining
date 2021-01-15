@@ -1,0 +1,93 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/msg_list.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Компонент для работы с сообщениями</h2>
+    <div id="container">
+        <div class="header">
+            <div><span>G</span></div>
+        </div>
+        <div class="work-area">
+            <div id="msg-list-container">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        class MsgCreator extends React.Component {
+            constructor(props) {
+                super(props);
+                this.submitHandler = this.submitHandler.bind(this);
+            }
+
+            submitHandler(){
+                this.props.submitHandler(this.$msgField);
+            }
+
+            render() {
+                return (
+                    <div className="create-block">
+                        <input ref={(msgField) => this.$msgField = $(msgField)} type="text"/>
+                        <input type="button" value="Отправить" onClick={this.submitHandler}/>
+                    </div>
+                )
+            }
+        }
+
+        class Msg extends React.Component {
+            render() {
+                return (
+                    <div className="msg"><p>{this.props.text}</p></div>
+                )
+            }
+        }
+
+        class MsgList extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    content: []
+                }
+                this.submitHandler = this.submitHandler.bind(this);
+            }
+
+            submitHandler($msgField) {
+                let thisComponent = this;
+                let text = $("input[type=text]").val();
+                text = $.trim(text);
+                if (!text) return;
+
+                $.ajax("/api/random_msg/").then(data => {
+                    thisComponent.setState(prevState => {
+                        prevState.content.push("Вы: " + text);
+                        prevState.content.push("Сервер: " + data.answer);
+                        $msgField.val("");
+                        return {
+                            content: prevState.content
+                        }
+                    })
+                });
+            }
+
+            render() {
+                return (
+                    <React.Fragment>
+                        {this.state.content.map((value, index) => <Msg key={index} text={value}/>)}
+                        <MsgCreator submitHandler={this.submitHandler}/>
+                    </React.Fragment>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <MsgList/>,
+            document.getElementById("msg-list-container")
+        )
+    </script>
+{% endblock %}

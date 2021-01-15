@@ -1,0 +1,66 @@
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search_form {
+    position: relative;
+    width: 580px;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid rgb(220, 220, 220);
+    border-radius: 10px;
+    box-shadow: 15px 15px 25px rgba(30, 30, 30, 0.2);
+    background-image: linear-gradient(to right bottom, rgb(240, 240, 240), rgb(230, 230, 230));
+}
+
+.selection_board {
+    font-size: 1.5em;
+    position: relative;
+    width: 500px;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid rgb(220, 220, 220);
+    border-radius: 10px;
+    background-color: aliceblue;
+}
+
+.search_field {
+    position: relative;
+    width: 500px;
+    margin: 5px 20px;
+    padding: 20px;
+    border: 1px solid rgb(220, 220, 220);
+    border-radius: 10px;
+    background-color: white;
+}
+
+.search_result {
+    position: absolute;
+    width: 500px;
+    max-height: 400px;
+    overflow: auto;
+    border: 1px solid rgb(220, 220, 220);
+    border-radius: 10px;
+    background-color: white;
+    margin: 5px 20px;
+    padding: 20px;
+}
+
+.item {
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px 15px;
+}
+
+.item:hover {
+    background-color: rgb(175, 238, 238);
+}
+
+.not_found_msg {
+    text-align: center;
+    font-style: italic;
+    color: gray;
+}
