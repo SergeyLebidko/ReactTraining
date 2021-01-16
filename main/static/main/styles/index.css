@@ -85,6 +85,9 @@ body {
 }
 
 .menu-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     position: absolute;
     width: 500px;
     height: 100%;
@@ -95,6 +98,7 @@ body {
     background-color: white;
     z-index: 1;
     box-shadow: 20px 0 20px rgba(220, 220, 220, 0.8);
+    box-sizing: border-box;
 }
 
 ul {
@@ -124,4 +128,9 @@ a:hover {
     color: rgb(150, 200, 200);
     transition-property: color;
     transition-duration: 500ms;
+}
+
+#admin-link:hover {
+    display: block;
+    color: red;
 }
