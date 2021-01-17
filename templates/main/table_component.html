@@ -143,8 +143,32 @@
             }
         }
 
+        let description2 = {
+            title: "Таблица \"Заказы\"",
+            url: "/api/orders/",
+            fields: {
+                id: "Идентификатор",
+                client: "Клиент",
+                product: "Товар",
+                count: "Количество"
+            }
+        }
+
+        let description3 = {
+            title: "Таблица \"Клиенты\"",
+            url: "/api/clients/",
+            fields: {
+                id: "Идентификатор",
+                title: "Наименование",
+            }
+        }
+
         ReactDOM.render(
-            <Table description={description1}/>,
+            [
+                <Table description={description1}/>,
+                <Table description={description2}/>,
+                <Table description={description3}/>
+            ],
             document.getElementById("container")
         );
     </script>

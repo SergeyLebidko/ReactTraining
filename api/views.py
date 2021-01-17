@@ -1,11 +1,10 @@
 import random
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .models import Product
-from .serializers import ProductSerializer
+from .models import Product, Order, Client
+from .serializers import ProductSerializer, OrderSerializer, ClientSerializer
 from .pagination import CustomPagination
 
 
@@ -41,3 +40,15 @@ class ProductViewSet(ReadOnlyModelViewSet):
             for param in search.split():
                 queryset = queryset.filter(title__icontains=param)
         return queryset
+
+
+class OrderViewSet(ReadOnlyModelViewSet):
+    serializer_class = OrderSerializer
+    pagination_class = CustomPagination
+    queryset = Order.objects.all()
+
+
+class ClientViewSet(ReadOnlyModelViewSet):
+    serializer_class = ClientSerializer
+    pagination_class = CustomPagination
+    queryset = Client.objects.all()
