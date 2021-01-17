@@ -66,20 +66,23 @@
             }
 
             createTable() {
+                let tdKey, thKey, trKey;
+                tdKey = thKey = trKey = 0;
                 let fields = Object.keys(this.props.description.fields);
 
-                let header = <tr>{fields.map(field => <th>{this.props.description.fields[field]}</th>)}</tr>
+                let header = <tr>{fields.map(field => <th
+                    key={thKey++}>{this.props.description.fields[field]}</th>)}</tr>
 
                 let rows = this.state.data.map(value => {
                     let cells = [];
                     for (let field of fields) {
-                        cells.push(<td>{value[field]}</td>);
+                        cells.push(<td key={tdKey++}>{value[field]}</td>);
                     }
-                    return <tr>{cells}</tr>
+                    return <tr key={trKey++}>{cells}</tr>
                 });
 
                 return (
-                    <table>
+                    <table className="regular_table">
                         <thead>{header}</thead>
                         <tbody>{rows}</tbody>
                     </table>
@@ -94,16 +97,20 @@
                 if (paginationData.previous !== null) {
                     navigation.push(
                         <span href={paginationData.previous} onClick={this.loadPaginatorPage}
-                              page={paginationData.pageNumber - 1} className="nav_button">
+                              page={paginationData.pageNumber - 1} className="nav_button" key="prevButton">
                             Назад
                         </span>
                     );
                 }
-                navigation.push(<span className="page_counter">Страница: {paginationData.pageNumber}</span>);
+
+                navigation.push(
+                    <span className="page_counter" key="pageCounter">Страница: {paginationData.pageNumber}</span>
+                );
+
                 if (paginationData.next !== null) {
                     navigation.push(
                         <span href={paginationData.next} onClick={this.loadPaginatorPage}
-                              page={paginationData.pageNumber + 1} className="nav_button">
+                              page={paginationData.pageNumber + 1} className="nav_button" key="nextButton">
                             Вперед
                         </span>
                     );
@@ -129,6 +136,62 @@
                         {this.createNavigation()}
                     </div>
                 )
+            }
+        }
+
+        class HorizontalTable extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    data: null
+                }
+            }
+
+            componentDidMount() {
+                if (this.state.data !== null) return;
+
+                let self = this;
+                $.ajax(this.props.description.url).then(data => {
+                    self.setState({
+                        data: data
+                    });
+                })
+            }
+
+            createRows() {
+                let rows = [];
+                let rowKey = 0;
+                $.each(this.props.description.fields, (fieldName, fieldValue) => {
+                    rows.push(
+                        <tr key={rowKey++}>
+                            <td>{fieldValue}</td>
+                            <td >{this.state.data[fieldName]}</td>
+                        </tr>
+                    )
+                });
+                return rows;
+            }
+
+            render() {
+                let title = <h3>{this.props.description.title}</h3>;
+                if (this.state.data === null) {
+                    return (
+                        <div className="table_container">
+                            {title}
+                            <h4>Данные для вывода таблицы загружаются...</h4>
+                        </div>
+                    )
+                }
+                return (
+                    <div className="table_container">
+                        {title}
+                        <table className="horizontal_table">
+                            <tbody>
+                            {this.createRows()}
+                            </tbody>
+                        </table>
+                    </div>
+                );
             }
         }
 
@@ -163,11 +226,22 @@
             }
         }
 
+        let description4 = {
+            title: "Основные количественные показатели",
+            url: "/api/number_of_records/",
+            fields: {
+                products_count: "Общее количество товаров в БД",
+                orders_count: "Общее количество заказов в БД",
+                clients_count: "Общее количество клиентов в БД"
+            }
+        }
+
         ReactDOM.render(
             [
-                <Table description={description1}/>,
-                <Table description={description2}/>,
-                <Table description={description3}/>
+                <Table key="productsTable" description={description1}/>,
+                <Table key="ordersTable" description={description2}/>,
+                <Table key="clientsTable" description={description3}/>,
+                <HorizontalTable key="number_of_records" description={description4}/>
             ],
             document.getElementById("container")
         );

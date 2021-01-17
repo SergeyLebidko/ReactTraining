@@ -52,3 +52,16 @@ class ClientViewSet(ReadOnlyModelViewSet):
     serializer_class = ClientSerializer
     pagination_class = CustomPagination
     queryset = Client.objects.all()
+
+
+@api_view(['GET'])
+def number_of_records(request):
+    products_count = Product.objects.count()
+    orders_count = Order.objects.count()
+    clients_count = Client.objects.count()
+    resp = {
+        'products_count': products_count,
+        'orders_count': orders_count,
+        'clients_count': clients_count
+    }
+    return Response(resp, status=status.HTTP_200_OK)

@@ -9,6 +9,13 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        result = serializers.ModelSerializer.to_representation(self, instance)
+        result['client'] = instance.client.title
+        result['product'] = instance.product.title
+        return result
+
     class Meta:
         model = Order
         fields = '__all__'

@@ -1,9 +1,10 @@
 from django.urls import path
 from rest_framework import routers
-from .views import random_msg, ProductViewSet, OrderViewSet, ClientViewSet
+from .views import random_msg, ProductViewSet, OrderViewSet, ClientViewSet, number_of_records
 
 urlpatterns = [
-    path('random_msg/', random_msg, name='random_msg')
+    path('random_msg/', random_msg, name='random_msg'),
+    path('number_of_records/', number_of_records, name='number_of_records')
 ]
 
 router = routers.SimpleRouter()

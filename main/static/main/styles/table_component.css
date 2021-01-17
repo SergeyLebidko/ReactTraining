@@ -10,39 +10,74 @@ table {
     border-spacing: 2px;
 }
 
-th {
+td, th {
+    padding: 5px 10px;
+}
+
+/* Стили для обычных таблиц (с заголовками сверху) */
+
+.regular_table th {
     text-align: center;
     background-color: dimgray;
     color: white;
 }
 
-th:first-child {
+.regular_table th:first-child {
     border-top-left-radius: 5px;
 }
 
-th:last-child {
+.regular_table th:last-child {
     border-top-right-radius: 5px;
 }
 
-td, th {
-    padding: 5px 10px;
-}
-
-tr:last-child td:first-child {
+.regular_table tr:last-child td:first-child {
     border-bottom-left-radius: 5px;
 }
 
-tr:last-child td:last-child {
+.regular_table tr:last-child td:last-child {
     border-bottom-right-radius: 5px;
 }
 
-tr:nth-child(odd) td {
+.regular_table tr:nth-child(odd) td {
     background-color: rgb(230, 230, 230);
 }
 
-tr:nth-child(even) td {
+.regular_table tr:nth-child(even) td {
     background-color: rgb(240, 240, 240);
 }
+
+/* Стили для горизонтальных таблиц (с заголовками сбоку) */
+
+.horizontal_table tr:first-child td:first-child {
+    border-top-left-radius: 5px;
+}
+
+.horizontal_table tr:first-child td:last-child {
+    border-top-right-radius: 5px;
+}
+
+.horizontal_table tr:last-child td:first-child {
+    border-bottom-left-radius: 5px;
+}
+
+.horizontal_table tr:last-child td:last-child {
+    border-bottom-right-radius: 5px;
+}
+
+.horizontal_table td:first-child {
+    background-color: dimgray;
+    color: white;
+}
+
+.horizontal_table tr:nth-of-type(odd) td:last-child {
+    background-color: rgb(230, 230, 230);
+}
+
+.horizontal_table tr:nth-of-type(even) td:last-child {
+    background-color: rgb(240, 240, 240);
+}
+
+/* Стили для области навигации */
 
 .navigation_container {
     display: flex;
