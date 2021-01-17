@@ -51,3 +51,7 @@ def toggle(request):
 
 def buttons(request):
     return render(request, 'main/buttons.html', context={})
+
+
+def table_component(request):
+    return render(request, 'main/table_component.html', context={})

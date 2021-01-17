@@ -1,0 +1,151 @@
+{% extends 'main/base_template.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/styles/table_component.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2 class="page-description">Табличный компонент (таблицы заполняются на основе разнообразных хзапросов к БД)</h2>
+    <div id="container"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/babel">
+        class Table extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    rawData: null,
+                    data: null,
+                    paginationData: null,
+                    pageNumber: null
+                }
+                this.loadPaginatorPage = this.loadPaginatorPage.bind(this);
+            }
+
+            componentDidMount() {
+                if (this.state.rawData != null) return;
+                $.ajax(this.props.description.url).then(data => {
+                    if ("results" in data) {
+                        this.setState({
+                            rawData: data,
+                            data: data.results,
+                            paginationData: {
+                                count: data.count,
+                                next: data.next,
+                                previous: data.previous,
+                                pageNumber: 1
+                            }
+                        });
+                    } else {
+                        this.setState({
+                            rawData: data,
+                            data: data
+                        });
+                    }
+                });
+            }
+
+            loadPaginatorPage(event) {
+                let $nav = $(event.target);
+                let url = $nav.attr("href");
+                let pageNumber = +$nav.attr("page");
+                $.ajax(url).then(data => {
+                    this.setState({
+                        rawData: data,
+                        data: data.results,
+                        paginationData: {
+                            count: data.count,
+                            next: data.next,
+                            previous: data.previous,
+                            pageNumber: pageNumber
+                        }
+                    })
+                });
+            }
+
+            createTable() {
+                let fields = Object.keys(this.props.description.fields);
+
+                let header = <tr>{fields.map(field => <th>{this.props.description.fields[field]}</th>)}</tr>
+
+                let rows = this.state.data.map(value => {
+                    let cells = [];
+                    for (let field of fields) {
+                        cells.push(<td>{value[field]}</td>);
+                    }
+                    return <tr>{cells}</tr>
+                });
+
+                return (
+                    <table>
+                        <thead>{header}</thead>
+                        <tbody>{rows}</tbody>
+                    </table>
+                )
+            }
+
+            createNavigation() {
+                let paginationData = this.state.paginationData;
+                if (paginationData === null || paginationData.count === 0) return;
+
+                let navigation = [];
+                if (paginationData.previous !== null) {
+                    navigation.push(
+                        <span href={paginationData.previous} onClick={this.loadPaginatorPage}
+                              page={paginationData.pageNumber - 1} className="nav_button">
+                            Назад
+                        </span>
+                    );
+                }
+                navigation.push(<span className="page_counter">Страница: {paginationData.pageNumber}</span>);
+                if (paginationData.next !== null) {
+                    navigation.push(
+                        <span href={paginationData.next} onClick={this.loadPaginatorPage}
+                              page={paginationData.pageNumber + 1} className="nav_button">
+                            Вперед
+                        </span>
+                    );
+                }
+
+                return <div className="navigation_container">{navigation}</div>
+            }
+
+            render() {
+                let title = <h3>{this.props.description.title}</h3>;
+                if (this.state.rawData === null) {
+                    return (
+                        <div className="table_container">
+                            {title}
+                            <h4>Данные для вывода таблицы загружаются...</h4>
+                        </div>
+                    )
+                }
+                return (
+                    <div className="table_container">
+                        {title}
+                        {this.createTable()}
+                        {this.createNavigation()}
+                    </div>
+                )
+            }
+        }
+
+        let description1 = {
+            title: "Таблица \"Товары\"",
+            url: "/api/products/",
+            fields: {
+                id: "Идентификатор",
+                title: "Наименование",
+                price: "Цена",
+                balance: "Остаток"
+            }
+        }
+
+        ReactDOM.render(
+            <Table description={description1}/>,
+            document.getElementById("container")
+        );
+    </script>
+{% endblock %}

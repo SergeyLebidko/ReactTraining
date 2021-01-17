@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import index, palette, dynamic_table, msg_list, preloader, popover, menu, slider_1, slider_2, animation, \
-    search_component, toggle, buttons
+    search_component, toggle, buttons, table_component
 
 app_name = 'main'
 
@@ -17,5 +17,6 @@ urlpatterns = [
     path('animation/', animation, name='animation'),
     path('search_component/', search_component, name='search_component'),
     path('toggle/', toggle, name='toggle'),
-    path('buttons/', buttons, name='buttons')
+    path('buttons/', buttons, name='buttons'),
+    path('table_component/', table_component, name='table_component')
 ]
