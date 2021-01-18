@@ -283,6 +283,19 @@
             }
         }
 
+        let description10 = {
+            title: "Ранжирование заказов по количеству",
+            url: "/api/labeled_orders/",
+            fields: {
+                id: "Идентификатор заказа",
+                client: "Клиент",
+                product: "Товар",
+                label: "Метка"
+            }
+        }
+
+
+
         ReactDOM.render(
             [
                 <Table key="productsTable" description={description1}/>,
@@ -293,7 +306,8 @@
                 <HorizontalTable key="ordersTotalCost" description={description6}/>,
                 <Table key="mostExpensiveProducts" description={description7}/>,
                 <Table key="mostCheapProducts" description={description8}/>,
-                <Table key="ordersCostForClients" description={description9}/>
+                <Table key="ordersCostForClients" description={description9}/>,
+                <Table key="labeledOrders" description={description10}/>
             ],
             document.getElementById("container")
         );

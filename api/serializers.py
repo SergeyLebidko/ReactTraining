@@ -14,6 +14,13 @@ class OrderSerializer(serializers.ModelSerializer):
         result = serializers.ModelSerializer.to_representation(self, instance)
         result['client'] = instance.client.title
         result['product'] = instance.product.title
+
+        # TODO Удалить дублирование кода
+        additional_fields = self.context.get('additional_fields')
+        if additional_fields:
+            for field in additional_fields:
+                result[field] = getattr(instance, field)
+
         return result
 
     class Meta:

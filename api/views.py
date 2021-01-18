@@ -1,6 +1,5 @@
 import random
-from django.db.models import F, Sum, Max, Min
-from django.core.paginator import Paginator
+from django.db.models import F, Sum, Max, Min, Case, When, Value, Q, CharField
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -113,5 +112,24 @@ def orders_cost_for_clients(request):
     paginator = CustomPagination()
     page = paginator.paginate_queryset(clients, request)
     serializer = ClientSerializer(page, many=True, context={'additional_fields': ['total_cost']})
+
+    return paginator.get_paginated_response(serializer.data)
+
+
+@api_view(['GET'])
+def labeled_orders(request):
+    """Заказы с меткой по количеству (малые, большие, средние)"""
+    orders = Order.objects.annotate(
+        label=Case(
+            When(count__lte=30, then=Value('Маленький заказ')),
+            When(Q(count__gt=30) & Q(count__lte=60), then=Value('Средний заказ')),
+            default=Value('Большой заказ'),
+            output_field=CharField()
+        )
+    )
+
+    paginator = CustomPagination()
+    page = paginator.paginate_queryset(orders, request)
+    serializer = OrderSerializer(page, many=True, context={'additional_fields': ['label']})
 
     return paginator.get_paginated_response(serializer.data)
