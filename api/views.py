@@ -1,4 +1,6 @@
 import random
+from django.db.models import F, Sum, Max, Min
+from django.core.paginator import Paginator
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -65,3 +67,51 @@ def number_of_records(request):
         'clients_count': clients_count
     }
     return Response(resp, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def products_total_cost(request):
+    """Суммарная стоимость всех товаров в БД"""
+    total_cost_data = Product.objects.aggregate(total_cost=Sum(F('price') * F('balance')))
+    return Response(total_cost_data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def orders_total_cost(request):
+    """Суммарная стоимость всех заказов"""
+    total_cost_data = Order.objects.aggregate(total_cost=Sum(F('count') * F('product__price')))
+    return Response(total_cost_data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def most_expensive_product(request):
+    """Список самых дорогих товаров"""
+    products = Product.objects.filter(price=Product.objects.aggregate(max_price=Max(F('price')))['max_price'])
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def most_cheap_products(request):
+    """Список самых дешевых товаров"""
+    products = Product.objects.filter(price=Product.objects.aggregate(min_price=Min(F('price')))['min_price'])
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def orders_cost_for_clients(request):
+    """Стоимость заказов каждого клиента"""
+    clients = Client.objects.annotate(
+        total_cost=Sum(F('order__count') * F('order__product__price'))
+    ).filter(
+        total_cost__isnull=False
+    ).order_by(
+        'title'
+    )
+
+    paginator = CustomPagination()
+    page = paginator.paginate_queryset(clients, request)
+    serializer = ClientSerializer(page, many=True, context={'additional_fields': ['total_cost']})
+
+    return paginator.get_paginated_response(serializer.data)

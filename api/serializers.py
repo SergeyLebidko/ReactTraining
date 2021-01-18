@@ -22,6 +22,15 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class ClientSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        result = serializers.ModelSerializer.to_representation(self, instance)
+        additional_fields = self.context.get('additional_fields')
+        if additional_fields:
+            for field in additional_fields:
+                result[field] = getattr(instance, field)
+        return result
+
     class Meta:
         model = Client
         fields = '__all__'

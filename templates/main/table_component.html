@@ -107,6 +107,10 @@
                     <span className="page_counter" key="pageCounter">Страница: {paginationData.pageNumber}</span>
                 );
 
+                navigation.push(
+                    <span className="page_counter" key="totalCountInfo">Всего строк: {paginationData.count}</span>
+                );
+
                 if (paginationData.next !== null) {
                     navigation.push(
                         <span href={paginationData.next} onClick={this.loadPaginatorPage}
@@ -165,7 +169,7 @@
                     rows.push(
                         <tr key={rowKey++}>
                             <td>{fieldValue}</td>
-                            <td >{this.state.data[fieldName]}</td>
+                            <td>{this.state.data[fieldName]}</td>
                         </tr>
                     )
                 });
@@ -236,12 +240,60 @@
             }
         }
 
+        let description5 = {
+            title: "Общая стоимость всех товаров в БД",
+            url: "/api/products_total_cost/",
+            fields: {
+                total_cost: "Общая стоимость",
+            }
+        }
+
+        let description6 = {
+            title: "Общая стоимость всех заказов в БД",
+            url: "/api/orders_total_cost/",
+            fields: {
+                total_cost: "Общая стоимость",
+            }
+        }
+
+        let description7 = {
+            title: "Самые дорогие товары",
+            url: "/api/most_expensive_product/",
+            fields: {
+                title: "Наименование",
+                price: "Цена"
+            }
+        }
+
+        let description8 = {
+            title: "Самые дешевые товары",
+            url: "/api/most_cheap_products/",
+            fields: {
+                title: "Наименование",
+                price: "Цена"
+            }
+        }
+
+        let description9 = {
+            title: "Стоимость заказов каждого клиента",
+            url: "/api/orders_cost_for_clients/",
+            fields: {
+                title: "Наименование",
+                total_cost: "Общая стоимость заказов"
+            }
+        }
+
         ReactDOM.render(
             [
                 <Table key="productsTable" description={description1}/>,
                 <Table key="ordersTable" description={description2}/>,
                 <Table key="clientsTable" description={description3}/>,
-                <HorizontalTable key="number_of_records" description={description4}/>
+                <HorizontalTable key="number_of_records" description={description4}/>,
+                <HorizontalTable key="productsTotalCost" description={description5}/>,
+                <HorizontalTable key="ordersTotalCost" description={description6}/>,
+                <Table key="mostExpensiveProducts" description={description7}/>,
+                <Table key="mostCheapProducts" description={description8}/>,
+                <Table key="ordersCostForClients" description={description9}/>
             ],
             document.getElementById("container")
         );
