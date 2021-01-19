@@ -294,7 +294,14 @@
             }
         }
 
-
+        let description11 = {
+            title: "Клиенты, не сделавшие ни одного заказа",
+            url: "/api/clients_without_orders/",
+            fields: {
+                id: "Идентификатор клиента",
+                title: "Наименование клиента",
+            }
+        }
 
         ReactDOM.render(
             [
@@ -307,7 +314,8 @@
                 <Table key="mostExpensiveProducts" description={description7}/>,
                 <Table key="mostCheapProducts" description={description8}/>,
                 <Table key="ordersCostForClients" description={description9}/>,
-                <Table key="labeledOrders" description={description10}/>
+                <Table key="labeledOrders" description={description10}/>,
+                <Table key="clientsWithoutOrders" description={description11}/>
             ],
             document.getElementById("container")
         );

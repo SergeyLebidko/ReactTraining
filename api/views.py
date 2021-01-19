@@ -1,5 +1,5 @@
 import random
-from django.db.models import F, Sum, Max, Min, Case, When, Value, Q, CharField
+from django.db.models import F, Sum, Max, Min, Case, When, Value, Q, CharField, Count
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -131,5 +131,17 @@ def labeled_orders(request):
     paginator = CustomPagination()
     page = paginator.paginate_queryset(orders, request)
     serializer = OrderSerializer(page, many=True, context={'additional_fields': ['label']})
+
+    return paginator.get_paginated_response(serializer.data)
+
+
+@api_view(['GET'])
+def clients_without_orders(request):
+    """Клиенты, не сделавшие ни одного заказа"""
+    clients = Client.objects.annotate(cnt=Count('order')).filter(cnt=0)
+
+    paginator = CustomPagination()
+    page = paginator.paginate_queryset(clients, request)
+    serializer = ClientSerializer(page, many=True)
 
     return paginator.get_paginated_response(serializer.data)
