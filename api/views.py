@@ -1,5 +1,5 @@
 import random
-from django.db.models import F, Sum, Max, Min, Case, When, Value, Q, CharField, Count
+from django.db.models import F, Sum, Max, Min, Case, When, Value, Q, CharField, Count, Prefetch
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -145,3 +145,30 @@ def clients_without_orders(request):
     serializer = ClientSerializer(page, many=True)
 
     return paginator.get_paginated_response(serializer.data)
+
+
+@api_view(['GET'])
+def client_video_and_cpu_orders(request):
+    """Клиенты и их заказы на видеокарты и процессоры"""
+    pr = Prefetch(
+        'order_set',
+        queryset=Order.objects.select_related('product').filter(
+            Q(product__title__contains='Видеокарта') | Q(product__title__contains='Процессор')
+        ),
+        to_attr='video_orders'
+    )
+    clients = Client.objects.prefetch_related(pr).all()
+
+    result = []
+    for client in clients:
+        for order in client.video_orders:
+            result.append({
+                'client': client.title,
+                'order': order.product.title,
+                'count': order.count
+            })
+
+    paginator = CustomPagination()
+    page = paginator.paginate_queryset(result, request)
+
+    return paginator.get_paginated_response(page)

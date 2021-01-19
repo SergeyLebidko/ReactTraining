@@ -303,6 +303,16 @@
             }
         }
 
+        let description12 = {
+            title: "Клиенты и их заказы на видеокарты и процессоры",
+            url: "/api/client_video_and_cpu_orders/",
+            fields: {
+                client: "Клиент",
+                order: "Товар",
+                count: "Количество"
+            }
+        }
+
         ReactDOM.render(
             [
                 <Table key="productsTable" description={description1}/>,
@@ -315,7 +325,8 @@
                 <Table key="mostCheapProducts" description={description8}/>,
                 <Table key="ordersCostForClients" description={description9}/>,
                 <Table key="labeledOrders" description={description10}/>,
-                <Table key="clientsWithoutOrders" description={description11}/>
+                <Table key="clientsWithoutOrders" description={description11}/>,
+                <Table key="clientVideoAndCpuOrders" description={description12}/>
             ],
             document.getElementById("container")
         );
