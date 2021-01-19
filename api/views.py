@@ -172,3 +172,15 @@ def client_video_and_cpu_orders(request):
     page = paginator.paginate_queryset(result, request)
 
     return paginator.get_paginated_response(page)
+
+
+@api_view(['GET'])
+def product_low(request):
+    """Товары, по которым заказано больше едениц, чем есть на складе"""
+    products = Product.objects.annotate(cnt=Sum('order__count')).filter(cnt__gt=F('balance')).order_by('cnt', 'balance')
+
+    paginator = CustomPagination()
+    page = paginator.paginate_queryset(products, request)
+    serialize = ProductSerializer(page, many=True, context={'additional_fields': ['cnt']})
+
+    return paginator.get_paginated_response(serialize.data)

@@ -313,6 +313,17 @@
             }
         }
 
+        let description13 = {
+            title: "Товары, количество заказанных едениц которых превышает количество на складе",
+            url: "/api/product_low/",
+            fields: {
+                id: "Идентификатор",
+                title: "Наименование товара",
+                balance: "Количество на складе",
+                cnt: "Заказано едениц"
+            }
+        }
+
         ReactDOM.render(
             [
                 <Table key="productsTable" description={description1}/>,
@@ -326,7 +337,8 @@
                 <Table key="ordersCostForClients" description={description9}/>,
                 <Table key="labeledOrders" description={description10}/>,
                 <Table key="clientsWithoutOrders" description={description11}/>,
-                <Table key="clientVideoAndCpuOrders" description={description12}/>
+                <Table key="clientVideoAndCpuOrders" description={description12}/>,
+                <Table key="productLow" description={description13}/>,
             ],
             document.getElementById("container")
         );
