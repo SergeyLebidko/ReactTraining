@@ -55,3 +55,7 @@ def buttons(request):
 
 def table_component(request):
     return render(request, 'main/table_component.html', context={})
+
+
+def paper_demo_1(request):
+    return render(request, 'main/paper_demo_1.html', context={})
