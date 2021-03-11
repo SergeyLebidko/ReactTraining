@@ -14,11 +14,18 @@
 
 {% block scripts %}
     <script type="text/javascript">
+        paper.install(window);
         window.onload = function () {
             let canvas = document.getElementById('my_canvas');
             paper.setup(canvas);
 
-            paper.view.draw();
+            let path = new Path();
+            path.strokeColor = 'black';
+            view.onMouseDown = function (e) {
+                path.add(e.point);
+            }
+
+            // paper.view.draw();
         }
     </script>
 {% endblock %}
