@@ -59,3 +59,7 @@ def table_component(request):
 
 def paper_demo_1(request):
     return render(request, 'main/paper_demo_1.html', context={})
+
+
+def paper_demo_2(request):
+    return render(request, 'main/paper_demo_2.html', context={})

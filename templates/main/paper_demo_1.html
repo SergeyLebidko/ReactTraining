@@ -6,18 +6,52 @@
 {% endblock %}
 
 {% block content %}
-    <h2 class="page-description">Демонстрация paper.js</h2>
+    <h2 class="page-description">Первая демонстрация paper.js</h2>
     <div id="container" class="container">
         <canvas id="my_canvas" width="600" height="600"></canvas>
     </div>
 {% endblock %}
 
 {% block scripts %}
-    <script type="text/paperscript" canvas="my_canvas">
-        var path = new Path();
-        path.strokeColor = 'black';
-        var start = new Point(100, 100);
-        path.moveTo(start);
-        path.lineTo(start + [100, -50]);
+    <script type="text/javascript">
+        window.onload = function () {
+            let canvas = document.getElementById('my_canvas');
+            paper.setup(canvas);
+
+            let coords = [
+                [100, 100],
+                [300, 120],
+                [500, 100],
+                [480, 300],
+                [500, 500],
+                [300, 480],
+                [100, 500],
+                [120, 300],
+            ];
+            let dots = [];
+            for (let [x, y] of coords){
+                dots.push(new paper.Point(x, y));
+            }
+
+            let path = new paper.Path();
+            path.add(...dots);
+            path.strokeColor = 'black';
+            path.strokeWidth = 3;
+            path.fullySelected = true;
+            path.closed = true;
+            path.smooth();
+
+            let circle = new paper.Path.Circle(new paper.Point(300, 300), 50);
+            circle.strokeColor = 'red';
+            circle.strokeWidth = 3;
+            circle.fillColor = 'lime';
+
+            let circleCopy = circle.clone();
+            circleCopy.radius = 80;
+            circleCopy.position.x += 200;
+            circleCopy.flatten(10);
+
+            paper.view.draw();
+        }
     </script>
 {% endblock %}
